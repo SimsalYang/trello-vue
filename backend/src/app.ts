@@ -11,6 +11,8 @@ import path from 'path';
 // 引入 路由解析库
 import KoaBodyParser from 'koa-bodyparser';
 
+import Boom from '@hapi/boom';
+
 (async () => {
   // 实例化 koa
   const app = new Koa();
@@ -19,6 +21,9 @@ import KoaBodyParser from 'koa-bodyparser';
   const router = new KoaRouter();
 
   // 注册路由
+  // 这里的 await 必须加，因为 bootstrapControllers 是异步的
+  // 如果不加，因为异步处理，在这里没处理完之前，会先处理后面的逻辑
+  // 就会发生错误
   await bootstrapControllers(app, {
     router,
     basePath: '/api',
@@ -48,6 +53,11 @@ import KoaBodyParser from 'koa-bodyparser';
       ctx.status = status;
       ctx.body = body;
     },
+  });
+
+  // 当所有路由都不存在时，处理错误
+  router.all('*', async (ctx) => {
+    throw Boom.notFound('Not Found', '路由不存在');
   });
 
   // 使用路由解析库

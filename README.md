@@ -45,3 +45,34 @@ post 请求需要安装 koa-bodyparser 路由解析库
   - 请求验证错误
     - params: 通过 path 规则验证
     - query:
+    - 其他业务逻辑错误使用 @hapi/boom 处理（特点是能统一管理错误信息）
+
+> bootstrapControllers 是异步函数，必须使用 await
+
+### postman 使用
+
+创建 collections 集合
+
+postman 的 params 是 query
+
+postman 内置数据生成器
+
+1. 使用文件夹阻止请求
+
+2. 添加断言测试脚本
+
+postman 内置对象 pm 进行断言测试，降低测试人力成本。
+
+```js
+pm.test('描述', function() {
+  // 断言
+  pm.response.to.have.body('abc'); // 或其他断言
+})
+```
+
+ajv - JSON Schema 断言
+
+断言库：chaijs.com
+
+自动测试：运行集合，自动测试集合中的所有测试
+

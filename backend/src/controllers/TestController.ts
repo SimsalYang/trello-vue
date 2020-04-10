@@ -9,6 +9,7 @@ import {
   Header,
 } from 'koa-ts-controllers';
 import { IsNumberString } from 'class-validator';
+import Boom from '@hapi/boom';
 
 class GetUsersQuery {
   @IsNumberString({
@@ -43,6 +44,13 @@ class TestController {
   // Query 验证，通过 class-validator 验证
   @Get('/user')
   async getUser2(@Query() q: GetUsersQuery) {
+    // 业务逻辑错误：
+    // 用户不存在，用户名被注册等等
+    // 使用 @hapi/boom，得到统一的错误 api
+    // if (true) {
+    //   // 用户已被注册
+    //   throw Boom.notFound('注册失败', '用户已经被注册');
+    // }
     return '当前 query 中的用户 page 是： ' + q.page;
   }
 
