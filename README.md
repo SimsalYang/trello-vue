@@ -76,3 +76,83 @@ ajv - JSON Schema 断言
 
 自动测试：运行集合，自动测试集合中的所有测试
 
+## 构建数据库
+
+> sequelize 与 sequelize-cli
+
+sequelize 是基于 node.js 的 ORM（Object Relational Mapping - 对象关系映射）库。
+
+sequelize-cli 是一个独立工具，提供快速操作数据库的功能。比如创建数据库、创建表等。
+
+### 安装
+
+`npm i -D  sequelize-cli` 和 `npm i sequelize`
+
+操作数据库，需要下载对应库，mysql 下载 mysql2，`npm i mysql2`。
+
+### 配置
+
+项目根目录建立 `.sequelizerc` 配置文件，填写配置内容。
+
+```js
+const path = require('path');
+
+module.exports = {
+  'env': 'development',
+  'config': path.resolve('src', 'configs/database.json'),
+  'migrations-path': path.resolve('src', 'database/migrations'),
+  'seeders-path': path.resolve('src', 'database/seeders'),
+  'models-path': path.resolve('src', 'database/models),
+  'debug': true
+};
+```
+
+### 创建/销毁数据库
+
+创建数据库：`db:create`，将此命令放在 package.json 中方便使用，在 package.json 中创建 scripts: `"db:create": "sequelize db:create"`。
+
+删除数据库：`db:drop`，同样的方法创建 scripts: `"db:drop": "sequelize db:drop"`
+
+### 创建表
+
+#### 1. 创建迁移脚本文件
+
+`sequelize migration:create --name TableNameInit`
+
+- queryInterface 对象，提供许多操作数据库结构的各种方法。
+
+- Sequelize 核心类，提供一些数据库相关的常量信息。
+
+- up 方法：注入 queryInterface 和 Sequelize；返回 Promise。
+
+- down 方法：修改表的操作
+
+#### 2. 执行迁移脚本
+
+在 package.json 中创建脚本：`"db:migrate": "sequelize db:migrate"`
+
+#### 3. 执行撤销操作
+
+`"db:migrate:undo[:all]": "sequelize db:migrate:undo[:all]"`
+
+#### 4. 更新迭代
+
+添加新的迁移脚本
+
+```shell
+sequelize migration:crate --name TableNameAddUpdateAt
+```
+
+### 种子
+
+操作数据库中的数据
+
+`"db:seed:all": "sequelize db:seed:all"`
+
+`"db:seed:undo:all": "sequelize db:seed:undo:all"`
+
+### 联合操作
+
+`"db:init": "npm run db:create && npm run db:migrate && npm run db:seed:all"`
+
+`"db:redo": "npm run db:drop && npm run db:init"`
