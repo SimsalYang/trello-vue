@@ -16,16 +16,22 @@ module.exports = {
         autoIncrement: true
       },
       name: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING(50),
+        unique: true,
+        allowNull: false
       },
       password: {
-        type: Sequelize.STRING(32)
+        type: Sequelize.STRING(32),
+        allowNull: false
+
       },
       createdAt: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false
       },
       updatedAt: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false
       }
     });
   },

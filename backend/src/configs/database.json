@@ -4,20 +4,23 @@
     "dialect": "mysql",
     "username": "root",
     "password": "123456",
-    "database": "trello-dev"
+    "database": "trello-dev",
+    "timezone": "+08:00"
   },
   "test": {
     "host": "127.0.0.1",
     "dialect": "mysql",
     "username": "root",
     "password": "123456",
-    "database": "trello-test"
+    "database": "trello-test",
+    "timezone": "+08:00"
   },
   "production": {
     "host": "127.0.0.1",
     "dialect": "mysql",
     "username": "root",
     "password": "123456",
-    "database": "trello-prod"
+    "database": "trello-prod",
+    "timezone": "+08:00"
   }
 }

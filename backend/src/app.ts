@@ -12,6 +12,8 @@ import path from 'path';
 import KoaBodyParser from 'koa-bodyparser';
 
 import Boom from '@hapi/boom';
+// 导入连接数数据库的 ts 版 sequelize
+import { Sequelize } from 'sequelize-typescript';
 
 (async () => {
   // 实例化 koa
@@ -19,6 +21,12 @@ import Boom from '@hapi/boom';
 
   // 实例化 koa-router
   const router = new KoaRouter();
+
+  // 连接数据库
+  const db = new Sequelize({
+    ...configs.database,
+    models: [__dirname + '/models/**/*'],
+  });
 
   // 注册路由
   // 这里的 await 必须加，因为 bootstrapControllers 是异步的
@@ -34,8 +42,8 @@ import Boom from '@hapi/boom';
     ],
     // 配置统一错误处理
     errorHandler: async (err: any, ctx: Context) => {
-      console.log(err);
-      // 服务其本身错误
+      // console.log(err);
+      // 服务器本身错误
       let status = 500;
       let body: any = {
         statusCode: status,
@@ -62,9 +70,10 @@ import Boom from '@hapi/boom';
 
   // 使用路由解析库
   app.use(KoaBodyParser());
+  // 注册路由
   app.use(router.routes());
 
-  app.listen(configs.server.port, configs.server.port, () => {
+  app.listen(configs.server.port, configs.server.host, () => {
     console.log(
       `服务启动成功：http://${configs.server.host}:${configs.server.port}`
     );

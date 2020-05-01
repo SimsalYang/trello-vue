@@ -4,15 +4,16 @@
     "module": "commonjs",
     "target": "ES2016",
     "sourceMap": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "noImplicitAny": true, // 隐式类型
+    "strictNullChecks": true, // 空值检查
+    "allowJs": true, // 允许 js
+    "resolveJsonModule": true, // 解析 json 模块
+    "esModuleInterop": true, // 处理非 ts 模块
+    "allowSyntheticDefaultImports": true, // 处理默认到处问题
+    "experimentalDecorators": true, // 装饰器
+    "emitDecoratorMetadata": true // 装饰器元数据
   },
+  // 设定 ts 编译文件所在的目录
   "include": [
     "./src/**/*"
   ]
