@@ -7,9 +7,13 @@ import {
   Post,
   Body,
   Header,
+  Ctx,
+  Flow,
 } from 'koa-ts-controllers';
 import { IsNumberString } from 'class-validator';
+import { Context } from 'koa';
 import Boom from '@hapi/boom';
+import authorization from '../middlewares/authorization';
 
 class GetUsersQuery {
   @IsNumberString({
@@ -64,5 +68,20 @@ class TestController {
     console.log(body);
     console.log('header', h);
     return `当前提交的数据是： ${JSON.stringify(body)}`;
+  }
+
+  /**
+   * 登录鉴权
+   */
+  @Get('/auth')
+  // 调用权限验证中间件装饰器
+  @Flow([authorization])
+  async auth(@Ctx() ctx: Context) {
+    // 必须要登录
+    return '你已经登录';
+  }
+  @Get('/noauth')
+  async noauth() {
+    // 不用登录
   }
 }

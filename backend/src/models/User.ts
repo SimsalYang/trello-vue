@@ -16,7 +16,7 @@ const crypto = require('crypto');
 
 // 映射数据库表
 @Table({
-  tableName: 'User',
+  tableName: 'user',
 })
 export class User extends Model<User> {
   // 定义字段
@@ -33,6 +33,7 @@ export class User extends Model<User> {
 
   // 密码需要将明文加密成密文
   // 使用 set，也可以使用 get 做一些其他的操作
+  @Column
   set password(val: string) {
     let md5 = crypto.createHash('md5');
     let newPassword = md5.update(val).digest('hex');

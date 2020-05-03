@@ -533,3 +533,160 @@ export function IsSameValue(
 ```
 
 #### 注册逻辑
+
+ORM 模型，类代表数据表，对象代表数据。
+
+如果对表进行操作，就调用类的静态方法。
+
+如果要操作数据，就调用类的实例的方法。
+
+> 数据模型中如果是需要手动添加的字段，一定要包含 `@Column` 列装饰器。
+
+写完逻辑后，通过 postman 进行验证。
+
+```javascript
+// 使用 ajv 进行更复杂的验证
+const Ajv = require('ajv');
+const ajv = new Ajv({logger: console});
+// 定义数据验证条件
+const schema = {
+    required: ['id', 'name', 'createdAt'],
+    properties: {
+        id: {
+            type: 'number'
+        },
+        name: {
+            type: 'string'
+        },
+        createdAt: {
+            type: 'string',
+            format: 'date-time'
+        }
+    }
+}
+
+pm.test('status:201', () => {
+    pm.response.to.have.status(201);
+});
+// 调用验证
+pm.test('schema', () => {
+    // 使用 ajv.validate
+    // 第一个参数就是验证条件
+    // 第二个参数是要验证的数据
+    // 它会返回一个布尔值
+    // 再传递给 pm.expect
+    pm.expect(ajv.validate(schema, pm.response.json())).to.be.true;
+})
+```
+
+#### JWT 鉴权
+
+安装 `jsonwebtoken` 鉴权库，同时安装类型声明库 `@types/jsonwebtoken`。
+
+```typescript
+    // jwt 鉴权
+    // 验证成功后，把用户信息加密，再通过 Header 的方式带给前端
+    let userInfo = {
+      id: user.id,
+      name: user.name,
+    };
+
+    // key 值存在 configs/index.ts 配置文件中
+    let token = jwt.sign(userInfo, configs.jwt.privateKey);
+    ctx.set('authorization', token);
+```
+
+以后在接口中需要用到用户信息，所以要把信息带过去。
+
+鉴权时需要在 ctx 中找 token 信息，但由于 ctx 中本身没有 token 信息，所以需要对 ctx 进行扩展。
+
+在 src 下新建 types/koa.ext.d.ts 文件对 koa 进行扩展。
+
+权限验证通过中间件的方式验证，在 src 目录下新建 middlewares 目录，用于存放中间件。
+
+在 controllers 中，使用 @Flow 装饰器进行验证。如果 controller 中所有的路由都需要权限验证，就把 @Flow 放在 controller 类的头部。
+
+## 前端
+
+### 项目构建与模板解析
+
+新建 frontend 目录，用于存放前端项目。
+
+在 frontend 目录下执行 `vue create vue-app` 创建基于 vue 的前端项目。选择 `babel`，`Vuex`，`vue-router`，生成项目。
+
+项目生成后，删除掉自动生成的一些不需要的配置。
+
+### 路由、视图组件的构建
+
+在 /src/router/index.js 中配置路由。
+
+> 注意： 卡片的弹窗是通过路由的方式访问的，这样做的好处是可以直接将卡片分享出去，可以直接通过链接访问卡片内容，弹窗的方式则达不到这个需求。
+
+针对卡片弹窗需要配置子路由。
+
+```vue
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  }, {
+    path: '/board/:id(\\d+)',
+    name: 'Board',
+    component: Board,
+    children: [
+      {
+        path: 'list/:listId(\\d+)/card/:cardId(\\d+)',
+        name: 'Card',
+        component: Card
+      }
+    ]
+  }
+]
+```
+
+配置完路由后，在 /src/views/ 目录下建立路由对应的视图。
+
+在 main.js 文件中引入全局的样式。
+
+### 注册和登录实现
+
+给予用户提示时，需要有良好的用户体验，可以把提示信息单独封装成一个组件。
+
+动态组件处理。
+
+> 把动态组件改变成可以用 js 调用的形式。
+
+#### 业务逻辑的处理
+
+使用 axios 与后端进行 ajax 交互。安装 axios。
+
+为了项目的统一管理，把和后端交互的文件，放在统一的目录 /src/api 下。
+
+项目在不同的环境可能具有不同的 baseURL，通过 vue 提供的环境信息配置，在项目根目录建立 `.env.development`、`.env.production` 等环境配置信息。
+
+```
+// .env.development
+VUE_APP_SERVER_API_PATH = /api
+```
+
+```javascript
+// /src/api/index.js
+axios.defaults.baseURL = process.env.VUE_APP_SERVER_API_PATH;
+```
+
+完成配置后，重启应用，使其生效。
+
+在 /src/api/index.js 文件中封装接口，把所有和数据有关的操作都放在 vuex 的 store 中进行处理。
+
+> 在应用中，并不是所有的数据都要用到 store
+
+针对 ajax 错误进行统一处理。
+
+在请求后端数据时，需要配置代理。在根目录建立 `vue.config.js` 文件配置代理。
+
+登录操作要进行鉴权才能访问具体页面。
+
+在路由中增加鉴权字段。
+
+用 localStorage 做数据持久化，保存登录信息。

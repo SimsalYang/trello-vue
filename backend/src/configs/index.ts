@@ -16,6 +16,9 @@ const configs = {
       port: 8080,
     },
     database: databaseConfig.development as IDatabaseConfig,
+    jwt: {
+      privateKey: 'trellovue',
+    },
   },
   test: {
     server: {
@@ -23,6 +26,9 @@ const configs = {
       port: 8080,
     },
     database: databaseConfig.test as IDatabaseConfig,
+    jwt: {
+      privateKey: 'trellovue',
+    },
   },
   production: {
     server: {
@@ -30,6 +36,9 @@ const configs = {
       port: 8080,
     },
     database: databaseConfig.production as IDatabaseConfig,
+    jwt: {
+      privateKey: 'trellovue',
+    },
   },
 };
 

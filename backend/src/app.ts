@@ -1,7 +1,7 @@
 // 导入配置文件
 import configs from './configs';
 // 导入 koa，并且安装 @types/koa 类型库
-import Koa, { Context } from 'koa';
+import Koa, { Context, Next } from 'koa';
 // 导入 koa-ts-controllers 的 bootstrapControllers 方法
 import { bootstrapControllers } from 'koa-ts-controllers';
 // 导入 koa-router
@@ -15,6 +15,8 @@ import Boom from '@hapi/boom';
 // 导入连接数数据库的 ts 版 sequelize
 import { Sequelize } from 'sequelize-typescript';
 
+import jwt from 'jsonwebtoken';
+
 (async () => {
   // 实例化 koa
   const app = new Koa();
@@ -26,6 +28,17 @@ import { Sequelize } from 'sequelize-typescript';
   const db = new Sequelize({
     ...configs.database,
     models: [__dirname + '/models/**/*'],
+  });
+
+  // 对鉴权进行统一处理
+  app.use(async (ctx: Context, next: Next) => {
+    // 从 headers 中取出 token
+    let token = ctx.headers['authorization'];
+    // 如果 token 存在，进行解密
+    if (token) {
+      ctx.userInfo = jwt.verify(token, configs.jwt.privateKey) as UserInfo;
+    }
+    await next();
   });
 
   // 注册路由
