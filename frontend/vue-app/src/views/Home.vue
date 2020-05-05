@@ -1,27 +1,7 @@
 <template>
   <div id="home">
     <!--头部-->
-    <header>
-      <div class="left">
-        <a href="" class="btn btn-icon">
-          <i class="icon icon-home"></i>
-        </a>
-        <a href="" class="btn btn-icon">
-          <i class="icon icon-board"></i>
-          <span class="txt">看板</span>
-        </a>
-      </div>
-      <a href="/" class="logo"></a>
-      <div class="right">
-        <a href="" class="btn btn-icon">
-          <i class="icon icon-add"></i>
-        </a>
-        <button class="avatar">
-          <span>Z</span>
-        </button>
-      </div>
-    </header>
-
+    <VHeader></VHeader>
     <main>
       <h2>
         <span class="icon icon-board"></span>
@@ -49,7 +29,13 @@
 </template>
 
 <script>
-export default {};
+import VHeader from '@/components/VHeader';
+export default {
+  name: 'Home',
+  components: {
+    VHeader,
+  },
+};
 </script>
 
 <style></style>

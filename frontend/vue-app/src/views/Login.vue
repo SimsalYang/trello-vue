@@ -1,6 +1,6 @@
 <template>
   <div id="register-login">
-    <a class="logo" href="/"></a>
+    <router-link class="logo" :to="{ name: 'Home' }"></router-link>
 
     <div class="section-wrapper">
       <div class="account-form">

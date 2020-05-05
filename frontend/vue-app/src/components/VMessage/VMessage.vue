@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       message: '',
-      type: 'info',
+      type: '',
       center: true,
       offset: 20,
       isShow: false,

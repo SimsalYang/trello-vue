@@ -606,6 +606,12 @@ pm.test('schema', () => {
 
 在 controllers 中，使用 @Flow 装饰器进行验证。如果 controller 中所有的路由都需要权限验证，就把 @Flow 放在 controller 类的头部。
 
+### 面板 api
+
+
+
+
+
 ## 前端
 
 ### 项目构建与模板解析
@@ -690,3 +696,13 @@ axios.defaults.baseURL = process.env.VUE_APP_SERVER_API_PATH;
 在路由中增加鉴权字段。
 
 用 localStorage 做数据持久化，保存登录信息。
+
+### 首页
+
+#### 顶部
+
+注意点：
+
+- 弹窗位置计算
+- 弹窗界面菜单动态加载
+

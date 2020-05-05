@@ -19,6 +19,12 @@ export default {
 
       // 存储用户信息
       localStorage.setItem('user', JSON.stringify(data));
+    },
+    removeUserInfo: (state, data) => {
+      // 清空用户信息
+      state.info = null;
+      // 删除 localStorage 中的用户条目
+      localStorage.removeItem('user');
     }
   },
   actions: {
@@ -34,9 +40,10 @@ export default {
           authorization: rs.headers.authorization
         })
         return rs;
-      } catch (error) {
-
-      }
+      } catch (error) { }
+    },
+    logout: async ({ commit }) => {
+      commit('removeUserInfo');
     }
   }
 }
