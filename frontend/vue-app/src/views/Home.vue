@@ -8,19 +8,22 @@
         我的看板
       </h2>
       <ul class="board-items">
-        <li class="board-item">
-          <span class="title">test</span>
-        </li>
-        <li class="board-item">
-          <span class="title">共同努力吧！</span>
-        </li>
-        <li class="board-item">
-          <span class="title">Welcome Board</span>
-        </li>
+        <router-link
+          tag="li"
+          class="board-item"
+          v-for="board of boards"
+          :key="board.id"
+          :to="{ name: 'Board', params: { id: board.id } }"
+        >
+          <span class="title">{{ board.name }}</span>
+        </router-link>
+
         <li class="board-item create-new-board">
           <textarea
             class="title form-field-input"
             placeholder="创建新看板"
+            ref="newBoardName"
+            @blur="postBoard"
           ></textarea>
         </li>
       </ul>
@@ -30,10 +33,35 @@
 
 <script>
 import VHeader from '@/components/VHeader';
+import { mapState } from 'vuex';
 export default {
   name: 'Home',
   components: {
     VHeader,
+  },
+  computed: {
+    ...mapState('board', {
+      boards: (state) => state.boards,
+    }),
+  },
+  methods: {
+    postBoard() {
+      let val = this.$refs.newBoardName.value;
+      if (val.trim !== '') {
+        try {
+          this.$store.dispatch('board/postBoard', {
+            name: val,
+          });
+          this.$message.success('面板创建成功');
+          this.$refs.newBoardName.value = '';
+        } catch (e) {}
+      }
+    },
+  },
+  created() {
+    if (this.boards === null) {
+      this.$store.dispatch('board/getBoards');
+    }
   },
 };
 </script>

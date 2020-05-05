@@ -49,3 +49,24 @@ export const login = data => {
     data
   })
 }
+
+/**
+ * 面板
+ */
+
+// 获取所有面板
+export const getBoards = () => {
+  return axios({
+    method: 'get',
+    url: '/board'
+  });
+}
+
+// 创建新面板
+export const postBoard = (data) => {
+  return axios({
+    method: 'post',
+    url: '/board',
+    data
+  })
+}

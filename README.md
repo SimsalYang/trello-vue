@@ -608,7 +608,7 @@ pm.test('schema', () => {
 
 ### 面板 api
 
-
+完成后端的面板api接口 Model 逻辑、中间件逻辑，完成接口后，利用 postman 对接口进行测试。
 
 
 
