@@ -14,7 +14,11 @@ import { Context } from 'koa';
 import Boom from '@hapi/boom';
 import authorization from '../middlewares/authorization';
 import { Board as BoardModel } from '../models/Board';
-import { PostAddBoardBody, PutUpdateBoardBody } from '../validators/Board';
+import {
+  PostAddBoardBody,
+  PutUpdateBoardBody,
+  getAndValidateBoard,
+} from '../validators/Board';
 
 @Controller('/board')
 @Flow([authorization])
@@ -55,7 +59,7 @@ export class BoardController {
    */
   @Get('/:id(\\d+)')
   public async getBoard(@Ctx() ctx: Context, @Params('id') id: number) {
-    let board = await getBoard(id, ctx.userInfo.id);
+    let board = await getAndValidateBoard(id, ctx.userInfo.id);
 
     return board;
   }
@@ -70,7 +74,7 @@ export class BoardController {
     @Body() body: PutUpdateBoardBody
   ) {
     let { name } = body;
-    let board = await getBoard(id, ctx.userInfo.id);
+    let board = await getAndValidateBoard(id, ctx.userInfo.id);
     // 执行更新
     board.name = name || board.name;
     await board.save();
@@ -83,24 +87,8 @@ export class BoardController {
    */
   @Delete('/:id(\\d+)')
   public async deleteBoard(@Ctx() ctx: Context, @Params('id') id: number) {
-    let board = await getBoard(id, ctx.userInfo.id);
+    let board = await getAndValidateBoard(id, ctx.userInfo.id);
     await board.destroy();
     ctx.status = 204;
   }
-}
-
-async function getBoard(id: number, userId: number): Promise<BoardModel> {
-  // 获取当前面板是否存在
-  let board = await BoardModel.findByPk(id);
-
-  // 面板不存在
-  if (!board) {
-    throw Boom.notFound('指定看板不存在');
-  }
-  // 查看面板是否是当前用户的
-  if (board.userId !== userId) {
-    throw Boom.forbidden('禁止访问该面板');
-  }
-
-  return board;
 }

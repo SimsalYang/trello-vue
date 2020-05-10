@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="left">
-      <router-link :to="{ name: 'Home' }" class="btn btn-icon">
+      <router-link :to="{ path: '/' }" class="btn btn-icon">
         <i class="icon icon-home"></i>
       </router-link>
       <router-link :to="{ name: 'Home' }" class="btn btn-icon">

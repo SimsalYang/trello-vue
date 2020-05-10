@@ -42,6 +42,7 @@ export default {
   computed: {
     ...mapState('board', {
       boards: (state) => state.boards,
+      inited: (state) => state.inited,
     }),
   },
   methods: {
@@ -59,7 +60,8 @@ export default {
     },
   },
   created() {
-    if (this.boards === null) {
+    // 如果没有初始化过，进行初始化
+    if (!this.inited) {
       this.$store.dispatch('board/getBoards');
     }
   },
