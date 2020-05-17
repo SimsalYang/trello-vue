@@ -53,7 +53,7 @@ export class BoardListController {
     boardList.order = maxOrderBoardList
       ? maxOrderBoardList.order + 65535
       : 65535;
-    console.log(boardList);
+    // console.log(boardList);
     await boardList.save();
 
     ctx.status = 201;
@@ -114,7 +114,7 @@ export class BoardListController {
   @Delete('/:id(\\d+)')
   public async deleteList(@Ctx() ctx: Context, @Params('id') id: number) {
     let boardlist = await getAndValidateBoardList(id, ctx.userInfo.id);
-    boardlist.destroy();
+    await boardlist.destroy();
     ctx.status = 204;
     return;
   }

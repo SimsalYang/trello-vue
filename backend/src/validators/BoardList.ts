@@ -65,6 +65,5 @@ export async function getAndValidateBoardList(
   if (board.userId !== userId) {
     throw Boom.forbidden('禁止访问该列表');
   }
-
   return board;
 }

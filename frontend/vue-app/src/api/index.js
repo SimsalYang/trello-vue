@@ -109,7 +109,30 @@ export const putList = data => {
     data: {
       boardId: data.boardId,
       name: data.name,
-      order: data.orger
+      order: data.order
     }
+  })
+}
+
+/**
+ * 卡片
+ */
+
+// 获取指定列表下所有卡片
+export const getCards = (boardListId) => {
+  return axios({
+    url: '/card',
+    params: {
+      boardListId
+    }
+  })
+}
+
+// 添加一个卡片
+export const postCard = (data) => {
+  return axios({
+    url: '/card',
+    method: 'post',
+    data
   })
 }

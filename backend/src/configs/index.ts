@@ -19,6 +19,9 @@ const configs = {
     jwt: {
       privateKey: 'trellovue',
     },
+    storage: {
+      prefix: '/public/attachments',
+    },
   },
   test: {
     server: {
@@ -29,6 +32,9 @@ const configs = {
     jwt: {
       privateKey: 'trellovue',
     },
+    storage: {
+      prefix: '/public/attachments',
+    },
   },
   production: {
     server: {
@@ -38,6 +44,9 @@ const configs = {
     database: databaseConfig.production as IDatabaseConfig,
     jwt: {
       privateKey: 'trellovue',
+    },
+    storage: {
+      prefix: '/public/attachments',
     },
   },
 };

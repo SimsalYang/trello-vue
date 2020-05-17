@@ -52,7 +52,7 @@ export default {
     editList: async ({ commit }, data) => {
       try {
         let rs = await api.putList(data);
-        commit('updateList', data);
+        commit('updateList', rs.data);
         return rs;
       } catch (error) {
         throw error;

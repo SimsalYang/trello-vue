@@ -110,13 +110,14 @@ export default {
     dragStart(e) {
       let el = e.component.$el;
       let board = el.parentNode;
-      let lists = [...board.querySelectorAll('.list-wrap')];
+      let lists = [...board.querySelectorAll('.list-wrap-content')];
+      // 记录下当前元素的索引
       el._index = lists.findIndex((list) => list === el);
     },
     dragMove(e) {
       let el = e.component.$el;
       let board = el.parentNode;
-      let lists = [...board.querySelectorAll('.list-wrap')];
+      let lists = [...board.querySelectorAll('.list-wrap-content')];
       let currentIndex = lists.findIndex((list) => list === el);
 
       lists.forEach((list, index) => {
@@ -139,6 +140,7 @@ export default {
         }
       });
     },
+    // 松手后进行排序
     async dragEnd(e) {
       let el = e.component.$el;
       let board = el.parentNode;
@@ -155,6 +157,7 @@ export default {
         let nextOrder =
           lists[currentIndex + 1] &&
           parseFloat(lists[currentIndex + 1].dataset.order);
+
         if (currentIndex === 0) {
           newOrder = nextOrder / 2;
         } else if (currentIndex === lists.length - 1) {

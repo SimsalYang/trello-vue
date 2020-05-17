@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bluebird": "^3.5.30",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/koa": "^2.11.3",
     "@types/koa-bodyparser": "^4.3.0",
