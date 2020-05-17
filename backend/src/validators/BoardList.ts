@@ -59,7 +59,7 @@ export async function getAndValidateBoardList(
 
   // 面板不存在
   if (!board) {
-    throw Boom.notFound('指定列表不存在');
+    throw Boom.notFound('指定面板列表不存在');
   }
   // 查看面板是否是当前用户的
   if (board.userId !== userId) {

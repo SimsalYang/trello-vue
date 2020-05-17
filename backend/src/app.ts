@@ -9,13 +9,15 @@ import KoaRouter from 'koa-router';
 // 引入 path
 import path from 'path';
 // 引入 路由解析库
-import KoaBodyParser from 'koa-bodyparser';
+import KoaBody from 'koa-body';
 
 import Boom from '@hapi/boom';
 // 导入连接数数据库的 ts 版 sequelize
 import { Sequelize } from 'sequelize-typescript';
-
+// 引入 jwt 鉴权库
 import jwt from 'jsonwebtoken';
+// 引入静态资源库
+import KoaStaticCache from 'koa-static-cache';
 
 (async () => {
   // 实例化 koa
@@ -23,6 +25,16 @@ import jwt from 'jsonwebtoken';
 
   // 实例化 koa-router
   const router = new KoaRouter();
+
+  // 静态资源代理
+  app.use(
+    KoaStaticCache({
+      dir: configs.storage.dir,
+      prefix: configs.storage.prefix,
+      gzip: true,
+      dynamic: true,
+    })
+  );
 
   // 连接数据库
   const db = new Sequelize({
@@ -82,7 +94,15 @@ import jwt from 'jsonwebtoken';
   });
 
   // 使用路由解析库
-  app.use(KoaBodyParser());
+  app.use(
+    KoaBody({
+      multipart: true,
+      formidable: {
+        uploadDir: configs.storage.dir,
+        keepExtensions: true,
+      },
+    })
+  );
   // 注册路由
   app.use(router.routes());
 

@@ -136,3 +136,29 @@ export const postCard = (data) => {
     data
   })
 }
+
+// 编辑一个指定的卡片
+export const putCard = data => {
+  return axios({
+    method: 'put',
+    url: '/card/' + data.id,
+    data: {
+      boardListId: data.boardListId,
+      name: data.name,
+      description: data.description,
+      order: data.order
+    }
+  })
+}
+
+// 上传附件
+export const uploadAttachment = data => {
+  let fd = new FormData();
+  fd.append('boardListCardId', data.boardListCardId);
+  fd.append('attachment', data.file);
+  return axios({
+    method: 'post',
+    url: '/card/attachment',
+    data: fd
+  })
+}

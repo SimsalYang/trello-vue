@@ -11,7 +11,9 @@ import {
   Delete,
 } from 'koa-ts-controllers';
 import authorization from '../middlewares/authorization';
+// import KoaBody from 'koa-body';
 import { Context } from 'koa';
+import path from 'path';
 import {
   PostAddCardBody,
   GetCardQuery,
@@ -24,6 +26,7 @@ import { Comment as CommentModel } from '../models/Comment';
 import { CardAttachment as CardAttachmentModel } from '../models/CardAttachment';
 import { Attachment as AttachmentModel } from '../models/Attachment';
 import configs from '../configs';
+import Boom from '@hapi/boom';
 
 @Controller('/card')
 @Flow([authorization])
@@ -153,5 +156,46 @@ export class CardController {
 
     ctx.status = 204;
     return;
+  }
+
+  /**
+   * 附件上传
+   */
+  @Post('/attachment')
+  public async addAttachment(@Ctx() ctx: Context, @Body() body: any) {
+    let { boardListCardId } = body;
+    let card = await getAndValidateCard(boardListCardId, ctx.userInfo.id);
+    // 上传的文件在 ctx.request.files.attachment 中
+    // console.log(ctx.request.files);
+    if (!ctx.request.files || !ctx.request.files.attachment) {
+      throw Boom.badData('缺少附件');
+    }
+    let file = ctx.request.files.attachment;
+    // console.log(file);
+    // console.log(ctx.request.files.attachment);
+    let attachment = new AttachmentModel();
+    attachment.userId = ctx.userInfo.id;
+    attachment.originName = file.name;
+    attachment.name = file.path.split(path.sep).pop() as string;
+    attachment.type = file.type;
+    attachment.size = file.size;
+    await attachment.save();
+
+    let cardAttachment = new CardAttachmentModel();
+    cardAttachment.userId = ctx.userInfo.id;
+    cardAttachment.boardListCardId = boardListCardId;
+    cardAttachment.attachmentId = attachment.id;
+    await cardAttachment.save();
+
+    ctx.status = 201;
+    return {
+      id: cardAttachment.id,
+      userId: cardAttachment.userId,
+      boardListCardId: cardAttachment.boardListCardId,
+      attachmentId: attachment.id,
+      path: configs.storage.prefix + '/' + attachment.name,
+      isCover: false,
+      detail: attachment,
+    };
   }
 }

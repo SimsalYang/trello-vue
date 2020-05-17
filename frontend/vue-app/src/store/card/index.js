@@ -7,7 +7,8 @@ export default {
   },
 
   getters: {
-    getCards: ({ cards }) => boardListId => cards.filter(card => card.boardListId == boardListId)
+    getCards: ({ cards }) => boardListId => cards.filter(card => card.boardListId == boardListId),
+    getCard: ({ cards }) => cardId => cards.find(card => card.id == cardId)
   },
 
   mutations: {
@@ -16,6 +17,25 @@ export default {
     },
     addCard: (state, data) => {
       state.cards = [...state.cards, data];
+    },
+    updateCard: (state, data) => {
+      state.cards = state.cards.map(card => {
+        if (card.id === data.id) {
+          return { ...card, ...data };
+        }
+        return card;
+      })
+    },
+    addAttachment: (state, data) => {
+      state.cards = state.cards.map(card => {
+        if (card.id == data.boardListCardId) {
+          return {
+            ...card,
+            attachments: [...card.attachments, data]
+          }
+        }
+        return card;
+      })
     }
   },
 
@@ -35,6 +55,25 @@ export default {
       try {
         let rs = await api.postCard(data);
         commit('addCard', rs.data);
+        return rs;
+      } catch (error) {
+        throw error;
+      }
+    },
+    editCard: async ({ commit }, data) => {
+      try {
+        let rs = await api.putCard(data);
+        // 直接用现有数据更新
+        commit('updateCard', data);
+        return rs;
+      } catch (error) {
+        throw error;
+      }
+    },
+    uploadAttachment: async ({ commit }, data) => {
+      try {
+        let rs = await api.uploadAttachment(data);
+        commit('addAttachment', rs.data);
         return rs;
       } catch (error) {
         throw error;

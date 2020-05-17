@@ -9,7 +9,9 @@ export default {
 
   getters: {
     // lists 进行 filter 处理可能返回 null 或 空数组，需要进行处理
-    getLists: ({ lists }) => boardId => lists.filter(list => list.boardId == boardId)
+    getLists: ({ lists }) => boardId => lists.filter(list => list.boardId == boardId),
+    // 获取一个 list
+    getList: ({ lists }) => listId => lists.find(list => list.id == listId)
   },
 
   mutations: {
@@ -52,7 +54,7 @@ export default {
     editList: async ({ commit }, data) => {
       try {
         let rs = await api.putList(data);
-        commit('updateList', rs.data);
+        commit('updateList', data);
         return rs;
       } catch (error) {
         throw error;

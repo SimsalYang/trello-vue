@@ -1,4 +1,5 @@
 import databaseConfig from './database.json';
+import path from 'path';
 
 // 定义 databaseConfig 类型接口
 interface IDatabaseConfig {
@@ -20,6 +21,7 @@ const configs = {
       privateKey: 'trellovue',
     },
     storage: {
+      dir: path.resolve(__dirname, '../attachments'),
       prefix: '/public/attachments',
     },
   },
@@ -33,6 +35,7 @@ const configs = {
       privateKey: 'trellovue',
     },
     storage: {
+      dir: path.resolve(__dirname, '../attachments'),
       prefix: '/public/attachments',
     },
   },
@@ -46,6 +49,7 @@ const configs = {
       privateKey: 'trellovue',
     },
     storage: {
+      dir: path.resolve(__dirname, '../attachments'),
       prefix: '/public/attachments',
     },
   },
