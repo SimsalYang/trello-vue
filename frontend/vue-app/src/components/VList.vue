@@ -21,6 +21,7 @@
         </div>
       </div>
 
+      <!-- 卡片列表 -->
       <div class="list-cards">
         <VCard v-for="card of cards" :key="card.id" :data="card"></VCard>
         <div class="list-card-add-form">

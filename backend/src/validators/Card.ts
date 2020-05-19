@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import Boom from '@hapi/boom';
 import { Card as CardModel } from '../models/Card';
+import { CardAttachment as CardAttachmentModel } from '../models/CardAttachment';
 
 export class PostAddCardBody {
   @Min(1, {
@@ -62,6 +63,13 @@ export class PutUpdateCardBody {
   order?: number;
 }
 
+export class PutSetCoverBody {
+  @Min(1, {
+    message: '附件 id 必须微为数字',
+  })
+  attachmentId: number;
+}
+
 export async function getAndValidateCard(
   id: number,
   userId: number
@@ -76,6 +84,24 @@ export async function getAndValidateCard(
   // 查看面板是否是当前用户的
   if (board.userId !== userId) {
     throw Boom.forbidden('禁止访问该列表');
+  }
+  return board;
+}
+
+export async function getAndValidateCardAttachment(
+  id: number,
+  userId: number
+): Promise<CardAttachmentModel> {
+  // 获取当前面板是否存在
+  let board = await CardAttachmentModel.findByPk(id);
+
+  // 面板不存在
+  if (!board) {
+    throw Boom.notFound('指定附件不存在');
+  }
+  // 查看面板是否是当前用户的
+  if (board.userId !== userId) {
+    throw Boom.forbidden('禁止访问该附件');
   }
   return board;
 }

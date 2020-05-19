@@ -19,6 +19,8 @@ import {
   GetCardQuery,
   PutUpdateCardBody,
   getAndValidateCard,
+  PutSetCoverBody,
+  getAndValidateCardAttachment,
 } from '../validators/Card';
 import { getAndValidateBoardList } from '../validators/BoardList';
 import { Card as CardModel } from '../models/Card';
@@ -197,5 +199,66 @@ export class CardController {
       isCover: false,
       detail: attachment,
     };
+  }
+
+  /**
+   * 设置封面
+   */
+  @Put('/attachment/cover/:id(\\d+)')
+  public async setCover(@Ctx() ctx: Context, @Params('id') id: number) {
+    let cardAttachment = await getAndValidateCardAttachment(
+      id,
+      ctx.userInfo.id
+    );
+
+    // 只能有一个是封面
+    await CardAttachmentModel.update(
+      {
+        isCover: false,
+      },
+      {
+        where: {
+          boardListCardId: cardAttachment.boardListCardId,
+        },
+      }
+    );
+    cardAttachment.isCover = true;
+    await cardAttachment.save();
+
+    ctx.status = 204;
+    return;
+  }
+
+  /**
+   * 取消封面
+   */
+  @Delete('/attachment/cover/:id(\\d+)')
+  public async deleteCover(@Ctx() ctx: Context, @Params('id') id: number) {
+    let cardAttachment = await getAndValidateCardAttachment(
+      id,
+      ctx.userInfo.id
+    );
+    cardAttachment.isCover = false;
+    cardAttachment.save();
+    ctx.status = 204;
+    return;
+  }
+
+  /**
+   * 删除附件
+   */
+  @Delete('/attachment/:id(\\d+)')
+  public async deleteAttachment(@Ctx() ctx: Context, @Params('id') id: number) {
+    let cardAttachment = await getAndValidateCardAttachment(
+      id,
+      ctx.userInfo.id
+    );
+
+    // 只是移除了关联表，
+    // 也可以将附件表，硬盘里存储的文件也删除
+    // 不过实际上，移除关联就可以，让用户看不到就行了，附件内容最好保留
+    await cardAttachment.destroy();
+    ctx.status = 204;
+    return;
   }
 }

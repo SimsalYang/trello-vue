@@ -79,11 +79,16 @@
                     attachment.createdAt | datetime
                   }}</span>
                   <span> - </span>
-                  <u>删除</u>
+                  <u @click="deleteAttachment(attachment.id)">删除</u>
                 </span>
                 <span class="attachment-thumbnail-operation">
                   <i class="icon icon-card-cover"></i>
-                  <u>移除封面</u>
+                  <u
+                    v-if="attachment.isCover"
+                    @click="removeCover(attachment.id)"
+                    >移除封面</u
+                  >
+                  <u v-else @click="setCover(attachment.id)">设为封面</u>
                 </span>
               </p>
             </li>
@@ -298,6 +303,36 @@ export default {
 
         this.$refs.attachment.value = '';
         this.$message.success('上传附件成功');
+      } catch (error) {}
+    },
+    setCover(id) {
+      try {
+        this.$store.dispatch('card/setCover', {
+          cardId: this.card.id,
+          id,
+        });
+
+        this.$message.success('设置封面成功');
+      } catch (error) {}
+    },
+    removeCover(id) {
+      try {
+        this.$store.dispatch('card/removeCover', {
+          cardId: this.card.id,
+          id,
+        });
+
+        this.$message.success('封面已移除');
+      } catch (error) {}
+    },
+    deleteAttachment(id) {
+      try {
+        this.$store.dispatch('card/deleteAttachment', {
+          cardId: this.card.id,
+          id,
+        });
+
+        this.$message.success('附件已删除');
       } catch (error) {}
     },
   },

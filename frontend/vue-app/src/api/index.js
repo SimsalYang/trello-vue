@@ -162,3 +162,27 @@ export const uploadAttachment = data => {
     data: fd
   })
 }
+
+// 设置封面
+export const setCover = data => {
+  return axios({
+    method: 'put',
+    url: '/card/attachment/cover/' + data.id
+  })
+}
+
+//移除封面
+export const removeCover = data => {
+  return axios({
+    method: 'delete',
+    url: '/card/attachment/cover/' + data.id
+  })
+}
+
+// 删除附件
+export const deleteAttachment = data => {
+  return axios({
+    method: 'delete',
+    url: '/card/attachment/' + data.id
+  })
+}
