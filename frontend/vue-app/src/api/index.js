@@ -186,3 +186,21 @@ export const deleteAttachment = data => {
     url: '/card/attachment/' + data.id
   })
 }
+
+// 获取评论
+export const getComments = data => {
+  return axios({
+    method: 'get',
+    url: '/comment',
+    params: data
+  })
+}
+
+// 添加评论
+export const postComment = data => {
+  return axios({
+    method: 'post',
+    url: '/comment',
+    data
+  })
+}

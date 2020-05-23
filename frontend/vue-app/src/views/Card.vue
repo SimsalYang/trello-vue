@@ -117,128 +117,7 @@
               <h3>评论</h3>
             </div>
           </div>
-
-          <div class="comment-post">
-            <div class="avatar">
-              <span>Z</span>
-            </div>
-            <div class="comment-content-box editing">
-              <textarea
-                class="comment-content-input"
-                placeholder="添加评论……"
-              ></textarea>
-              <button class="btn btn-edit">保存</button>
-            </div>
-          </div>
-
-          <ul class="comments">
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span> at </span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">
-                  非常不错！！
-                </div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span> at </span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">
-                  非常不错！！
-                </div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span> at </span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">
-                  非常不错！！
-                </div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span> at </span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">
-                  非常不错！！
-                </div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span> at </span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">
-                  非常不错！！
-                </div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span> at </span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">
-                  非常不错！！
-                </div>
-              </div>
-            </li>
-          </ul>
-
-          <div class="comment-pagination">
-            <div class="pagination">
-              <span>首页</span>
-              <span>上一页</span>
-              <span>...</span>
-              <span>4</span>
-              <span>5</span>
-              <span class="current-page">6</span>
-              <span>7</span>
-              <span>8</span>
-              <span>...</span>
-              <span>下一页</span>
-              <span>尾页</span>
-            </div>
-          </div>
+          <VComment :card-id="card.id"></VComment>
         </div>
       </div>
     </div>
@@ -246,9 +125,13 @@
 </template>
 
 <script>
+import VComment from '@/components/VComment';
 import datetime from '@/filters/datetime';
 export default {
   name: 'Card',
+  components: {
+    VComment,
+  },
   filters: {
     datetime,
   },
